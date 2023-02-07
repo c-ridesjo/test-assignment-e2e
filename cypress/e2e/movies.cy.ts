@@ -6,6 +6,6 @@ describe('movies application', () => {
   it("should contain a button", () => {
     cy.visit("http://localhost:1234");
 
-    cy.get("button");
-  })
-})
+    cy.get("button").contains("Sök").should("exist");
+  });
+});
