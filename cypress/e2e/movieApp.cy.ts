@@ -41,7 +41,8 @@ describe('tests for input and button', () => {
 
   it("should find movie titles containing the text typed below", () => {
     cy.get("input").type("Finding Nemo").should("have.value", "Finding Nemo");
-    cy.get("button").contains("Sök").click();  
+    cy.get("button").click();  
+    cy.get("h3").contains("Nemo");
   });
 
 });
