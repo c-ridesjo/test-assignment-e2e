@@ -46,3 +46,25 @@ describe('tests for input and button', () => {
   });
 
 });
+
+describe('tests with mock', () => {
+
+  it("should get mock data", () => { 
+    cy.intercept("GET", "http://omdbapi.com/*",    // stämmer URL?
+    {"title": "Perfect stranger"}).as ("omdbCall");
+    cy.get("input").type("Perfect stranger");
+    cy.get("button").click();
+
+    cy.wait("@omdbCall").its("request.url").should("contain", "/Perfect stranger");
+  });
+
+  it("should get mock data with correct url", () => { 
+    cy.intercept("GET", "http://omdbapi.com/*",    // stämmer URL?
+    {fixture:"omdbResponse"}).as ("omdbCall");
+    cy.get("input").type("Perfect stranger");
+    cy.get("button").click();
+
+    cy.wait("@omdbCall").its("request.url").should("contain", "/Perfect stranger");
+  });
+}); 
+
