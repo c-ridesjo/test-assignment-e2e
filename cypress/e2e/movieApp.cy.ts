@@ -2,12 +2,11 @@ beforeEach(() => {
   cy.visit("/");
 });
 
-
   it('passes', () => {
   });
-
-describe('tests for page content', () => {
 /*
+describe('tests for page content', () => {
+
   it("should contain a button", () => {  
     cy.get("button").should("exist");
   });
@@ -42,24 +41,22 @@ describe('tests for input and button', () => {
 
   it("should find movie titles containing the text typed below", () => {
     cy.get("input").type("Finding Nemo").should("have.value", "Finding Nemo");
-    cy.get("button").click();     
+    cy.get("button").click();  
+    cy.get("h3").contains("Nemo");    
   });
-    
-    //cy.get("h3").contains("Nemo"); 
-
-  it("should get one movie", () => {
+      
+  it("should get the first movie image in the list", () => {   
     cy.get("input").type("Rambo").should("have.value","Rambo");
     cy.get("button").click();
-    cy.get("img:first").should("exist");        //????????
+    cy.get("img").first();    
   }); 
-*/
-});
 
+});*/
 
-describe('tests with mock', () => {   
+describe('tests with mock', () => {   // Dessa två fungerar inte
 
    it("should get mock data", () => { 
-    cy.intercept("GET", "http://omdbapi.com/*", 
+    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*", 
     {"title": "Perfect stranger"}).as ("omdbCall");
 
     cy.get("input").type("Perfect stranger");
@@ -69,24 +66,33 @@ describe('tests with mock', () => {
   }); 
 
   it("should get mock data with correct url", () => {   
-    cy.intercept("GET", "http://omdbapi.com/*",   
+    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",   
     { fixture:"movies" }).as ("omdbCall");
 
     cy.get("input").type("Perfect stranger").should("have.value", "Perfect stranger");
     cy.get("button").click();
   
-    cy.wait("@omdbCall").its('request.url').should("contain", "Perfect%20stranger");    
-  });
- 
-  it("should create resource correctly", () => {
-    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",  
-    { fixture: "movies" }).as("omdbCall");
-
-    cy.get("input").type("Perfect stranger").should("have.value", "Perfect%20stranger");
+    cy.wait("@omdbCall").its('request.url').should("contain", "Perfect%20stranger");
+  }); 
+/*
+  it("should display error message when movie can't be found", () => {
+    cy.intercept("GET", "http://omdbapi.com/*",   
+    { fixture:"error" }).as ("errorCall");
+    cy.get("input").type("titunic").should("have.value", "titunic");
     cy.get("button").click();
   
-  
+    cy.wait("@errorCall");
+    cy.get("p").contains("Inga sökresultat att visa").should("exist");
+  });
 
-    cy.wait("@omdbCall").its('request.url');  
-  }); 
-});  
+  it("should display error message when empty input field", () => {
+    cy.intercept("GET", "http://omdbapi.com/*",   
+    { fixture:"error" }).as ("errorCall");
+    cy.get("input").type(" ").should("have.value", " ");
+    cy.get("button").click();
+  
+    cy.wait("@errorCall");
+    cy.get("p").contains("Inga sökresultat att visa").should("exist");
+  });*/
+
+});
