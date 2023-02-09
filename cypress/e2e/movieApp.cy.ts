@@ -2,12 +2,12 @@ beforeEach(() => {
   cy.visit("/");
 });
 
-/*
+
   it('passes', () => {
   });
 
 describe('tests for page content', () => {
-
+/*
   it("should contain a button", () => {  
     cy.get("button").should("exist");
   });
@@ -47,63 +47,46 @@ describe('tests for input and button', () => {
     
     //cy.get("h3").contains("Nemo"); 
 
- /*  it("should get five movies", () => {
+  it("should get one movie", () => {
     cy.get("input").type("Rambo").should("have.value","Rambo");
     cy.get("button").click();
-    cy.get("movie-container").should("have.length", 5);
+    cy.get("img:first").should("exist");        //????????
+  }); 
+*/
+});
+
+
+describe('tests with mock', () => {   
+
+   it("should get mock data", () => { 
+    cy.intercept("GET", "http://omdbapi.com/*", 
+    {"title": "Perfect stranger"}).as ("omdbCall");
+
+    cy.get("input").type("Perfect stranger");
+    cy.get("button").click();
+
+    cy.wait("@omdbCall").its("request.url").should("contain", "Perfect%20stranger");
   }); 
 
-}); */
-
-describe('tests with mock', () => {
-
-  it("should get mock data", () => { 
-    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",    // stämmer URL?
-    {"title": "Perfect stranger"}).as ("omdbCall");
-    cy.get("input").type("Perfect stranger");
-    cy.get("button").click();
-
-    cy.wait("@omdbCall").its("request.url").should("contain", "Perfect stranger");
-  });
-
-  it("should get mock data with correct url", () => {   //samma test som lektionen i dag
-    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",    // stämmer URL?
+  it("should get mock data with correct url", () => {   
+    cy.intercept("GET", "http://omdbapi.com/*",   
     { fixture:"movies" }).as ("omdbCall");
-    
-  //skriv 8 i testrutan
 
-  //klicka på knappen sök
-
-    cy.get("input").type("Perfect stranger");
+    cy.get("input").type("Perfect stranger").should("have.value", "Perfect stranger");
     cy.get("button").click();
-
-    cy.wait("@omdbCall").its('request.url').should("contain", "Perfect stranger");
-
-    //kontrollera html baserat på vår fixture
+  
+    cy.wait("@omdbCall").its('request.url').should("contain", "Perfect%20stranger");    
   });
-});
+ 
+  it("should create resource correctly", () => {
+    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",  
+    { fixture: "movies" }).as("omdbCall");
 
+    cy.get("input").type("Perfect stranger").should("have.value", "Perfect%20stranger");
+    cy.get("button").click();
+  
+  
 
-// test lektion torsdag - mocks
-
-it("should create resource correctly", ()=> {
-  cy.intercept("POST", "https://swapi.dev/api/person/*", {success: true});  //happy flow
-
-  //fyll i formulär
-
-  // klicka på spara-knappen
-
-  // kontrollera att vår ok-ruta syns
-});
-
-it("should create resource correctly", ()=> {
-  cy.intercept("POST", "https://swapi.dev/api/people/*", {success: false, error:
-  "Error message from api regarding the request"});  
-
-  //fyll i formulär
-
-  // klicka på spara-knappen
-
-  // kontrollera att vår ok-ruta syns
-});
-
+    cy.wait("@omdbCall").its('request.url');  
+  }); 
+});  
