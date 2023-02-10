@@ -4,7 +4,7 @@ beforeEach(() => {
 
   it('passes', () => {
   });
-/*
+
 describe('tests for page content', () => {
 
   it("should contain a button", () => {  
@@ -51,13 +51,13 @@ describe('tests for input and button', () => {
     cy.get("img").first();    
   }); 
 
-});*/
+});
 
-describe('tests with mock', () => {   // Dessa två fungerar inte
+describe('tests with mock', () => {   
 
    it("should get mock data", () => { 
-    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*", 
-    {"title": "Perfect stranger"}).as ("omdbCall");
+    cy.intercept("GET", "http://omdbapi.com/*", 
+    {"search": "Perfect stranger"}).as ("omdbCall");
 
     cy.get("input").type("Perfect stranger");
     cy.get("button").click();
@@ -66,15 +66,16 @@ describe('tests with mock', () => {   // Dessa två fungerar inte
   }); 
 
   it("should get mock data with correct url", () => {   
-    cy.intercept("GET", "http://omdbapi.com/?apikey=416ed51a&s=/*",   
+    cy.intercept("GET", "http://omdbapi.com/*",   
     { fixture:"movies" }).as ("omdbCall");
 
     cy.get("input").type("Perfect stranger").should("have.value", "Perfect stranger");
     cy.get("button").click();
   
-    cy.wait("@omdbCall").its('request.url').should("contain", "Perfect%20stranger");
+    cy.wait("@omdbCall").its('request.url').should("contain", "stranger");
+    cy.get("h3").contains("stranger").should("exist");
   }); 
-/*
+
   it("should display error message when movie can't be found", () => {
     cy.intercept("GET", "http://omdbapi.com/*",   
     { fixture:"error" }).as ("errorCall");
@@ -93,6 +94,6 @@ describe('tests with mock', () => {   // Dessa två fungerar inte
   
     cy.wait("@errorCall");
     cy.get("p").contains("Inga sökresultat att visa").should("exist");
-  });*/
+  });
 
 });
