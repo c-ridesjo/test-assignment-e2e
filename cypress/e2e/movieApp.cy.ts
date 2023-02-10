@@ -44,7 +44,7 @@ describe('tests for input and button', () => {
     cy.get("button").click();  
     cy.get("h3").contains("Nemo");    
   });
-      
+
   it("should get the first movie image in the list", () => {   
     cy.get("input").type("Rambo").should("have.value","Rambo");
     cy.get("button").click();
@@ -97,3 +97,6 @@ describe('tests with mock', () => {
   });
 
 });
+
+
+
